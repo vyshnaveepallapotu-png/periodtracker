@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Period Tracker</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="top">
+    <h1>🌸 Period Tracker</h1>
+    <p>Track your cycle, get early alerts about possible PCOS/PCOD, and find gynaecologists near you.</p>
+  </header>
+
+  <main>
+    <!-- Alert -->
+    <section id="alertBox" class="alert info" role="status" aria-live="polite"></section>
+
+    <!-- Stats -->
+    <section class="stats" id="stats"></section>
+
+    <div class="grid">
+      <!-- Log period -->
+      <section class="card">
+        <h2>Log a period</h2>
+        <form id="logForm">
+          <label>Start date
+            <input type="date" id="startDate" required />
+          </label>
+          <label>End date <small>(leave empty if it is still going)</small>
+            <input type="date" id="endDate" />
+          </label>
+          <label>Flow
+            <select id="flow">
+              <option value="light">Light</option>
+              <option value="medium" selected>Medium</option>
+              <option value="heavy">Heavy</option>
+            </select>
+          </label>
+          <label>Notes <small>(optional)</small>
+            <input type="text" id="notes" maxlength="120" placeholder="cramps, mood, etc." />
+          </label>
+          <button type="submit">Save period</button>
+          <p id="formMsg" class="msg" role="alert"></p>
+        </form>
+      </section>
+
+      <!-- Calendar -->
+      <section class="card">
+        <div class="calHead">
+          <button id="prevMonth" aria-label="Previous month">‹</button>
+          <h2 id="monthLabel"></h2>
+          <button id="nextMonth" aria-label="Next month">›</button>
+        </div>
+        <div class="calGrid" id="calGrid"></div>
+        <p class="legend">
+          <span class="dot period"></span> Period
+          <span class="dot predicted"></span> Predicted
+          <span class="dot today"></span> Today
+        </p>
+      </section>
+    </div>
+
+    <!-- Symptoms -->
+    <section class="card">
+      <h2>Symptom check</h2>
+      <p class="hint">Answer honestly. This helps the app judge whether missed or irregular periods may point to PCOS/PCOD.</p>
+      <label class="inline">How long have you gone without a period?
+        <select id="missedMonths">
+          <option value="0">Not applicable / no gap</option>
+          <option value="1">About 1 month late</option>
+          <option value="2">About 2 months</option>
+          <option value="3">3 months</option>
+          <option value="4">4 months</option>
+          <option value="6">6 months or more</option>
+        </select>
+      </label>
+      <div class="checks" id="symptoms">
+        <label><input type="checkbox" data-key="acne" /> Frequent or severe acne</label>
+        <label><input type="checkbox" data-key="excessHair" /> Extra hair on face, chest or belly</label>
+        <label><input type="checkbox" data-key="hairThinning" /> Thinning hair on the scalp</label>
+        <label><input type="checkbox" data-key="weightGain" /> Weight gain, hard to lose weight</label>
+        <label><input type="checkbox" data-key="darkPatches" /> Dark patches on neck, underarms or groin</label>
+        <label><input type="checkbox" data-key="familyHistory" /> Mother or sister has PCOS/PCOD or diabetes</label>
+      </div>
+    </section>
+
+    <!-- Hospitals -->
+    <section class="card" id="hospitalSection">
+      <h2>Nearest gynaecologists and hospitals</h2>
+      <div class="row">
+        <button id="locateBtn" type="button">📍 Use my location</button>
+        <span class="or">or</span>
+        <input type="text" id="placeInput" placeholder="Type your area or city, e.g. Anna Nagar, Chennai" />
+        <button id="searchBtn" type="button">Search</button>
+      </div>
+      <p id="hospMsg" class="msg"></p>
+      <div id="map" hidden></div>
+      <ul id="hospList" class="hospList"></ul>
+      <p class="hint">Results come from OpenStreetMap, so some places may be missing. Always call ahead to confirm timings.
+        <a id="gmapsLink" href="https://www.google.com/maps/search/gynecologist+near+me" target="_blank" rel="noopener">Search on Google Maps</a>
+      </p>
+    </section>
+
+    <!-- History -->
+    <section class="card">
+      <h2>History</h2>
+      <div class="tableWrap">
+        <table id="history">
+          <thead><tr><th>Start</th><th>End</th><th>Days</th><th>Flow</th><th>Notes</th><th></th></tr></thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div class="row">
+        <button id="exportBtn" type="button" class="secondary">Download my data</button>
+        <button id="clearBtn" type="button" class="danger">Delete all data</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p><strong>Not medical advice.</strong> This app only flags patterns. It cannot diagnose PCOS/PCOD or any condition. Please see a doctor for a proper check-up.
+      Your data is stored only in this browser (localStorage) and is never uploaded.</p>
+  </footer>
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="logic.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
